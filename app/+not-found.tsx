@@ -1,26 +1,31 @@
 import { Link, Stack } from 'expo-router';
-
 import { Text, View } from 'react-native';
-
-import { Container } from '@/components/Container';
+import { ChefHat, ArrowLeft } from 'lucide-react-native';
 
 export default function NotFoundScreen() {
   return (
-    <View className={styles.container}>
-      <Stack.Screen options={{ title: 'Oops!' }} />
-      <Container>
-        <Text className={styles.title}>{"This screen doesn't exist."}</Text>
-        <Link href="/" className={styles.link}>
-          <Text className={styles.linkText}>Go to home screen!</Text>
+    <>
+      {/* This updates the navigation header for this specific screen */}
+      <Stack.Screen options={{ title: 'Page Not Found', headerShown: true }} />
+
+      <View className="bg-background flex-1 items-center justify-center p-6">
+        <View className="bg-secondary/10 mb-6 rounded-full p-6">
+          <ChefHat size={64} className="text-primary" />
+        </View>
+
+        <Text className="text-text mb-2 text-center text-2xl font-black">Lost in the kitchen?</Text>
+
+        <Text className="text-secondary mb-10 text-center leading-5">
+          We couldnt find the recipe or page you were looking for.
+        </Text>
+
+        <Link href="/" asChild>
+          <View className="bg-primary shadow-primary/30 flex-row items-center rounded-2xl px-8 py-4 shadow-lg active:scale-95">
+            <ArrowLeft size={20} className="text-text" />
+            <Text className="text-text ml-3 font-black">Back to Recipes</Text>
+          </View>
         </Link>
-      </Container>
-    </View>
+      </View>
+    </>
   );
 }
-
-const styles = {
-  container: `flex flex-1 bg-white`,
-  title: `text-xl font-bold`,
-  link: `mt-4 pt-4`,
-  linkText: `text-base text-[#2e78b7]`,
-};

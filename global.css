@@ -1,3 +1,69 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%; /* slate-50 */
+    --foreground: 222 47% 11%; /* slate-900 */
+
+    --outer-background: 214 32% 91%; /* slate-200 */
+
+    --card: 0 0% 100%; /* white */
+    --card-foreground: 222 47% 11%; /* slate-900 */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 243 75% 59%; /* indigo-600 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 214 32% 91%; /* slate-200 */
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 215 16% 47%; /* slate-500 */
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 25 95% 53%; /* orange-500 */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 350 89% 60%; /* rose-500 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%; /* slate-200 */
+    --input: 210 40% 98%; /* slate-50 */
+    --ring: 243 75% 59%;
+  }
+
+  .dark {
+    --background: 222 47% 11%; /* slate-900 */
+    --foreground: 210 40% 98%; /* slate-100 */
+
+    --outer-background: 222 47% 6%; /* slate-950 */
+
+    --card: 217 33% 17%; /* slate-800 */
+    --card-foreground: 210 40% 98%; /* slate-100 */
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 243 75% 59%; /* indigo-600 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217 33% 17%; /* slate-800 */
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 215 20% 65%; /* slate-400 */
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 25 95% 53%; /* orange-500 */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 350 89% 60%; /* rose-500 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 217 19% 27%; /* slate-700 */
+    --input: 222 47% 6%; /* slate-950 */
+    --ring: 243 75% 59%;
+  }
+}
