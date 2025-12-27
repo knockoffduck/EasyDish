@@ -1,0 +1,19 @@
+meta {
+  name: Coles - Category Items
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://www.coles.com.au/_next/data/20251211.3-7c1a76ef824f3f4ddadd06ec7ce76d316b1ebecc/en/browse/meat-seafood.json?slug=meat-seafood
+  body: none
+  auth: inherit
+}
+
+params:query {
+  slug: meat-seafood
+}
+
+settings {
+  encodeUrl: true
+}

@@ -59,7 +59,7 @@ export default function RootLayout() {
       */}
       <View
         key={darkMode ? 'dark' : 'light'}
-        className={`bg-background flex-1 ${darkMode ? 'dark' : ''}`}>
+        className={`flex-1 bg-background ${darkMode ? 'dark' : ''}`}>
         <StatusBar style={darkMode ? 'light' : 'dark'} />
 
         <Stack
@@ -75,6 +75,16 @@ export default function RootLayout() {
 
           {/* Individual Recipe View */}
           <Stack.Screen name="recipe/[id]" />
+
+          {/* Edit Recipe View */}
+          <Stack.Screen
+            name="recipe/edit"
+            options={{
+              presentation: 'modal',
+              headerShown: false,
+              title: 'Edit Recipe',
+            }}
+          />
 
           {/* Add Recipe Slide-up Modal */}
           <Stack.Screen

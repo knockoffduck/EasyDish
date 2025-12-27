@@ -35,8 +35,8 @@ export default function RecipeDetailScreen() {
 
   if (!recipe) {
     return (
-      <View className="bg-background flex-1 items-center justify-center">
-        <Text className="text-text font-bold">Recipe not found</Text>
+      <View className="flex-1 items-center justify-center bg-background">
+        <Text className="font-bold text-text">Recipe not found</Text>
       </View>
     );
   }
@@ -55,33 +55,40 @@ export default function RecipeDetailScreen() {
     ]);
   };
 
+  const handleEdit = () => {
+    router.push({
+      pathname: '/recipe/edit',
+      params: { id: recipe.id },
+    });
+  };
+
   const handleAddToList = () => {
     addToShoppingList(recipe);
     setShowToast(true);
   };
 
   return (
-    <View className="bg-background flex-1">
+    <View className="flex-1 bg-background">
       {/* Sticky Header */}
       <View
-        className="bg-background border-border z-10 flex-row items-center border-b px-4 py-2"
+        className="z-10 flex-row items-center border-b border-border bg-background px-4 py-2"
         style={{ paddingTop: insets.top }}>
         <Pressable
           onPress={() => router.back()}
-          className="active:bg-secondary/20 rounded-full p-2">
+          className="rounded-full p-2 active:bg-secondary/20">
           <ArrowLeft size={24} className="text-text" />
         </Pressable>
-        <Text className="text-text mx-2 flex-1 truncate text-xl font-bold" numberOfLines={1}>
+        <Text className="mx-2 flex-1 truncate text-xl font-bold text-text" numberOfLines={1}>
           {recipe.title}
         </Text>
         <View className="flex-row gap-1">
-          <Pressable className="active:bg-secondary/20 rounded-full p-2">
+          <Pressable onPress={handleEdit} className="rounded-full p-2 active:bg-secondary/20">
             <Edit2 size={20} className="text-muted" />
           </Pressable>
-          <Pressable className="active:bg-secondary/20 rounded-full p-2">
+          <Pressable className="rounded-full p-2 active:bg-secondary/20">
             <Copy size={20} className="text-muted" />
           </Pressable>
-          <Pressable onPress={handleDelete} className="active:bg-destructive/10 rounded-full p-2">
+          <Pressable onPress={handleDelete} className="rounded-full p-2 active:bg-destructive/10">
             <Trash2 size={20} className="text-destructive" />
           </Pressable>
         </View>
@@ -99,48 +106,49 @@ export default function RecipeDetailScreen() {
         <View className="p-6">
           {/* Stats Row */}
           <View className="mb-8 flex-row flex-wrap gap-2">
-            <View className="bg-card border-border flex-1 items-center rounded-2xl border p-3 shadow-sm">
-              <Clock size={18} className="text-accent mb-1" />
-              <Text className="text-muted text-[10px] font-bold uppercase">TIME</Text>
-              <Text className="text-text text-sm font-bold">{recipe.prepTime}</Text>
+            <View className="flex-1 items-center rounded-2xl border border-border bg-card p-3 shadow-sm">
+              <Clock size={18} className="mb-1 text-accent" />
+              <Text className="text-[10px] font-bold uppercase text-muted">TIME</Text>
+              <Text className="text-sm font-bold text-text">{recipe.prepTime}</Text>
             </View>
-            <View className="bg-card border-border flex-1 items-center rounded-2xl border p-3 shadow-sm">
-              <Users size={18} className="text-primary mb-1" />
-              <Text className="text-muted text-[10px] font-bold uppercase">YIELD</Text>
-              <Text className="text-text text-sm font-bold">{recipe.servings} servings</Text>
+            <View className="flex-1 items-center rounded-2xl border border-border bg-card p-3 shadow-sm">
+              <Users size={18} className="mb-1 text-primary" />
+              <Text className="text-[10px] font-bold uppercase text-muted">YIELD</Text>
+              <Text className="text-sm font-bold text-text">{recipe.servings} servings</Text>
             </View>
-            {recipe.tags &&
-              recipe.tags.map((tag) => (
-                <View
-                  key={tag}
-                  className="bg-card border-primary/20 flex-1 items-center rounded-2xl border p-3 shadow-sm">
-                  <Zap size={18} className="text-primary mb-1" />
-                  <Text className="text-muted text-[10px] font-bold uppercase">EQUIPMENT</Text>
-                  <Text className="text-text text-sm font-bold">{tag}</Text>
-                </View>
-              ))}
+            {recipe.tags && (
+              <View className="flex-1 items-center rounded-2xl border border-primary/20 bg-card p-3 shadow-sm">
+                <Zap size={18} className="mb-1 text-primary" />
+                <Text className="text-[10px] font-bold uppercase text-muted">EQUIPMENT</Text>
+                {recipe.tags.map((tag) => (
+                  <Text key={tag} className="text-sm font-bold text-text">
+                    {tag}
+                  </Text>
+                ))}
+              </View>
+            )}
           </View>
 
           {/* Ingredients Section */}
           <View className="mb-8">
             <View className="mb-4 flex-row items-center justify-between">
-              <Text className="text-text text-lg font-bold">Ingredients</Text>
+              <Text className="text-lg font-bold text-text">Ingredients</Text>
               <Pressable
                 onPress={handleAddToList}
-                className="bg-primary flex-row items-center gap-1 rounded-full px-3 py-1.5 active:scale-95">
+                className="flex-row items-center gap-1 rounded-full bg-primary px-3 py-1.5 active:scale-95">
                 <ShoppingCart size={14} className="text-primary-foreground" />
-                <Text className="text-primary-foreground text-xs font-bold">Add to List</Text>
+                <Text className="text-xs font-bold text-primary-foreground">Add to List</Text>
               </Pressable>
             </View>
 
-            <View className="bg-card border-border rounded-3xl border p-4 shadow-sm">
+            <View className="rounded-3xl border border-border bg-card p-4 shadow-sm">
               {recipe.ingredients.map((ing, i) => (
                 <View
                   key={i}
-                  className="border-border/50 flex-row justify-between border-b py-3 last:border-0">
+                  className="flex-row justify-between border-b border-border/50 py-3 last:border-0">
                   <View>
-                    <Text className="text-text font-medium">{ing.name}</Text>
-                    <Text className="text-primary text-[10px] font-bold uppercase">
+                    <Text className="font-medium text-text">{ing.name}</Text>
+                    <Text className="text-[10px] font-bold uppercase text-primary">
                       {ing.category}
                     </Text>
                   </View>
@@ -152,16 +160,16 @@ export default function RecipeDetailScreen() {
 
           {/* Instructions Section */}
           <View>
-            <Text className="text-text mb-4 text-lg font-bold">Instructions</Text>
+            <Text className="mb-4 text-lg font-bold text-text">Instructions</Text>
             <View className="gap-4">
               {recipe.steps.map((step, i) => (
                 <View
                   key={i}
-                  className="bg-card border-border flex-row gap-4 rounded-2xl border p-4 shadow-sm">
-                  <View className="bg-primary h-6 w-6 items-center justify-center rounded-full">
+                  className="flex-row gap-4 rounded-2xl border border-border bg-card p-4 shadow-sm">
+                  <View className="h-6 w-6 items-center justify-center rounded-full bg-primary">
                     <Text className="text-xs font-bold text-white">{i + 1}</Text>
                   </View>
-                  <Text className="text-text/80 flex-1 text-sm leading-relaxed">{step}</Text>
+                  <Text className="flex-1 text-sm leading-relaxed text-text/80">{step}</Text>
                 </View>
               ))}
             </View>
@@ -172,7 +180,7 @@ export default function RecipeDetailScreen() {
       {/* Toast Notification */}
       {showToast && (
         <View className="absolute left-0 right-0 top-24 z-[60] items-center">
-          <View className="bg-primary shadow-primary/40 flex-row items-center justify-center gap-2 rounded-2xl px-6 py-3 shadow-2xl">
+          <View className="flex-row items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 shadow-2xl shadow-primary/40">
             <View className="rounded-full bg-white/20 p-1">
               <Check size={14} className="text-white" strokeWidth={4} />
             </View>

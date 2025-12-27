@@ -6,6 +6,7 @@ import { Recipe, ShoppingItem } from '../types';
 import { User } from '@supabase/supabase-js';
 import { colorScheme } from 'nativewind';
 import { supabase } from '@/services/supabase';
+import { findBestAldiMatch } from '@/services/itemMatch';
 
 interface StoreState {
   // --- Data ---
@@ -20,6 +21,7 @@ interface StoreState {
   // --- Actions ---
   // Recipes
   addRecipe: (recipe: Recipe) => Promise<void>;
+  updateRecipe: (recipe: Recipe) => Promise<void>;
   deleteRecipe: (id: string) => Promise<void>;
   fetchRecipes: () => Promise<void>;
 
@@ -135,6 +137,36 @@ export const useStore = create<StoreState>()(
           return { recipes: [finalRecipe, ...otherRecipes] };
         });
       },
+      // --- Recipe Actions ---
+
+      updateRecipe: async (recipe) => {
+        const { user } = get();
+
+        // 1. Optimistic local update
+        // We update the local state immediately so the UI feels snappy
+        set((state) => ({
+          recipes: state.recipes.map((r) => (r.id === recipe.id ? recipe : r)),
+        }));
+
+        // 2. If logged in and ID is a valid UUID, sync to Supabase
+        if (user && isUuid(recipe.id)) {
+          const supabaseData = mapRecipeToSupabase(recipe, user.id);
+
+          // Explicitly add the ID back for the update
+          supabaseData.id = recipe.id;
+
+          const { error } = await supabase
+            .from('recipes')
+            .upsert(supabaseData) // upsert updates if ID exists
+            .eq('id', recipe.id);
+
+          if (error) {
+            console.error('Error updating recipe in Supabase:', error.message);
+            // Optional: Revert local state if the server update fails
+            get().fetchRecipes();
+          }
+        }
+      },
 
       deleteRecipe: async (id) => {
         const { user } = get();
@@ -156,18 +188,31 @@ export const useStore = create<StoreState>()(
       },
 
       // --- Shopping List Actions (Local Only) ---
-      addToShoppingList: (recipe) =>
-        set((state) => {
-          const newItems: ShoppingItem[] = recipe.ingredients.map((ing) => ({
+      addToShoppingList: async (recipe) => {
+        const { shoppingList } = get();
+
+        // 1. Map ingredients to matching promises
+        const matchingPromises = recipe.ingredients.map(async (ing) => {
+          const match = await findBestAldiMatch(ing.name);
+
+          return {
             id: Math.random().toString(36).substring(7),
-            name: ing.name,
+            name: match ? match.name : ing.name, // Use Aldi name if found
             amount: ing.amount,
-            category: ing.category || 'Other',
+            category: match ? match.category : ing.category || 'Other', // Standardize category
             completed: false,
             sourceRecipe: recipe.title,
-          }));
-          return { shoppingList: [...state.shoppingList, ...newItems] };
-        }),
+            aldiId: match?.id || null,
+            price: match?.price || null,
+            sku: match?.sku || null,
+            isMatched: !!match,
+          };
+        });
+
+        // 2. Resolve all matches and update state
+        const newItems = await Promise.all(matchingPromises);
+        set({ shoppingList: [...shoppingList, ...newItems] });
+      },
 
       toggleShoppingItem: (id) =>
         set((state) => ({

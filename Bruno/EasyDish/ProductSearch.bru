@@ -1,0 +1,52 @@
+meta {
+  name: ProductSearch
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://api.aldi.com.au/v3/product-search?currency=AUD&serviceType=walk-in&limit=30&offset=0&sort=relevance&servicePoint=G075
+  body: none
+  auth: inherit
+}
+
+params:query {
+  currency: AUD
+  serviceType: walk-in
+  limit: 30
+  offset: 0
+  sort: relevance
+  servicePoint: G075
+}
+
+script:post-response {
+  // 1. Get the body from the response
+  const body = res.getBody();
+  
+  // 2. Check if data exists
+  if (body && body.data) {
+    console.log(`--- Found ${body.data.length} Products ---`);
+  
+    // 3. Loop through the products and print name + price
+    body.data.forEach((item) => {
+      const name = item.name;
+      const price = item.price.amountRelevantDisplay;
+      const brand = item.brandName;
+      const categories = item.categories[0].name
+  
+      console.log(`[${categories}] [${brand}]  ${name}: ${price}`);
+    });
+  
+    // 4. Optional: Save the total count to a variable for pagination logic
+    const total = body.meta.pagination.totalCount;
+    bru.setVar("total_products", total);
+    
+  } else {
+    console.error("No data found in response");
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
