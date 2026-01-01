@@ -1,25 +1,28 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Text } from 'react-native';
 import { ChefHat, Plus } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
+import Button from '../ui/Button';
 
 export default function Header() {
   const router = useRouter();
 
   return (
-    <View className="bg-background border-border flex-row items-center justify-between border-b p-6 pb-4">
+    <View className="bg-background border-border flex-row items-center justify-between border-b px-6 py-4">
       <View>
         <View className="flex-row items-center gap-2">
-          <ChefHat size={24} className="text-primary" fill="currentColor" />
-          <Text className="text-primary text-2xl font-black tracking-tighter">EasyDish</Text>
+          <ChefHat size={28} className="text-primary" strokeWidth={2.5} />
+          <Text className="text-foreground text-2xl font-black tracking-tight">EasyDish</Text>
         </View>
-        <Text className="text-muted text-[10px] font-bold tracking-widest">YOUR AI SOUS CHEF</Text>
+        <Text className="text-muted-foreground text-[11px] font-bold tracking-[0.2em] ml-1">YOUR AI SOUS CHEF</Text>
       </View>
 
-      <Pressable
+      <Button
         onPress={() => router.push('/modal')}
-        className="bg-primary shadow-primary/20 rounded-2xl p-3 shadow-lg active:scale-95">
-        <Plus size={24} className="text-white" />
-      </Pressable>
+        variant="primary"
+        size="icon"
+        icon={<Plus size={24} color="white" />}
+        className="rounded-full shadow-xl shadow-primary/30"
+      />
     </View>
   );
 }

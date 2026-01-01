@@ -43,6 +43,12 @@ module.exports = {
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
       },
+      fontFamily: {
+        sans: ['Outfit_400Regular', 'sans-serif'],
+        medium: ['Outfit_500Medium', 'sans-serif'],
+        bold: ['Outfit_700Bold', 'sans-serif'],
+        black: ['Outfit_900Black', 'sans-serif'],
+      },
     },
   },
   plugins: [],

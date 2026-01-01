@@ -6,10 +6,10 @@ export default function TabLayout() {
   const { darkMode } = useStore();
 
   // Map to theme colors defined in global.css / tailwind.config.js
-  const primary = 'hsl(243, 75%, 59%)'; // indigo-600
-  const inactive = darkMode ? 'hsl(215, 20%, 65%)' : 'hsl(215, 16%, 47%)'; // muted
-  const background = darkMode ? 'hsl(222, 47%, 11%)' : 'hsl(0, 0%, 100%)'; // background / card
-  const border = darkMode ? 'hsl(217, 19%, 27%)' : 'hsl(214, 32%, 91%)'; // border
+  const primary = 'hsl(262, 83%, 58%)'; // Violet-600
+  const inactive = darkMode ? 'hsl(240, 5%, 65%)' : 'hsl(240, 4%, 46%)'; // Zinc-400 / Zinc-500
+  const background = darkMode ? 'hsl(240, 10%, 9%)' : 'hsl(0, 0%, 100%)'; // Zinc-900 / White
+  const border = darkMode ? 'hsl(240, 4%, 16%)' : 'hsl(240, 6%, 90%)'; // Zinc-800 / Zinc-200
 
   return (
     <Tabs

@@ -8,6 +8,17 @@ import { useStore } from '../store/useStore';
 import { useColorScheme, cssInterop } from 'nativewind';
 import { supabase } from '../services/supabase';
 import * as LucideIcons from 'lucide-react-native';
+import { useFonts } from 'expo-font';
+import {
+  Outfit_400Regular,
+  Outfit_500Medium,
+  Outfit_700Bold,
+  Outfit_900Black,
+} from '@expo-google-fonts/outfit';
+import * as SplashScreen from 'expo-splash-screen';
+
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
 
 Object.entries(LucideIcons).forEach(([name, Icon]: [string, any]) => {
   if (name.match(/^[A-Z]/) && (typeof Icon === 'function' || typeof Icon === 'object')) {
@@ -28,6 +39,19 @@ export default function RootLayout() {
   const { darkMode, setUser } = useStore();
   const { setColorScheme } = useColorScheme();
 
+  const [loaded] = useFonts({
+    Outfit_400Regular,
+    Outfit_500Medium,
+    Outfit_700Bold,
+    Outfit_900Black,
+  });
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
   // 1. Sync Zustand dark mode state with NativeWind's internal color scheme
   useEffect(() => {
     setColorScheme(darkMode ? 'dark' : 'light');
@@ -35,20 +59,16 @@ export default function RootLayout() {
 
   // 2. Auth Listener: Sync Supabase User with Zustand Store
   useEffect(() => {
-    // Check for an existing active session on mount
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user); // Set initial user state
-    });
-
-    // Listen for login, logout, or token refresh events
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      // If session exists, set the user; otherwise, set to null (logged out)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
 
-    // Clean up subscription when the layout unmounts
-    return () => authListener.subscription.unsubscribe();
-  }, [setUser]);
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>

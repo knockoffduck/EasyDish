@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TextInput } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Search } from 'lucide-react-native';
 import { useStore } from '../../store/useStore';
 import RecipeCard from '../../components/RecipeCard';
 import Header from '../../components/ui/Header';
 import { useRouter } from 'expo-router';
+import Input from '../../components/ui/Input';
 
 export default function RecipesScreen() {
   const { recipes, darkMode } = useStore();
@@ -38,16 +39,13 @@ export default function RecipesScreen() {
         ListHeaderComponent={
           <View className="p-4">
             {/* Search Bar Section */}
-            <View className="relative mb-6 justify-center">
-              <View className="absolute left-4 z-10">
-                <Search size={18} className="text-muted" />
-              </View>
-              <TextInput
+            <View className="mb-6">
+              <Input
                 value={query}
                 onChangeText={setQuery}
                 placeholder="Search recipes, tags, ingredients..."
-                placeholderTextColor={placeholderColor}
-                className="bg-input border-border text-text w-full rounded-2xl border py-3.5 pl-11 pr-4 text-sm shadow-sm"
+                leftIcon={<Search size={18} className="text-muted-foreground" />}
+                className="h-12"
               />
             </View>
 
